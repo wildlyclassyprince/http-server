@@ -18,11 +18,15 @@ type PlayerServer struct {
 
 // ServeHTTP is the handler that processes the HTTP requests
 func (p *PlayerServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-
-	if r.Method == http.MethodPost {
-		w.WriteHeader(http.StatusAccepted)
-		return
+	switch r.Method {
+	case http.MethodPost:
+		p.processWin(w)
+	case http.MethodGet:
+		p.showScore(w, r)
 	}
+}
+
+func (p *PlayerServer) showScore(w http.ResponseWriter, r *http.Request) {
 
 	player := strings.TrimPrefix(r.URL.Path, "/players/")
 
@@ -33,6 +37,10 @@ func (p *PlayerServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	}
 
 	fmt.Fprint(w, score)
+}
+
+func (p *PlayerServer) processWin(w http.ResponseWriter) {
+	w.WriteHeader(http.StatusAccepted)
 }
 
 // GetPlayerScore takes the player name and returns the score
