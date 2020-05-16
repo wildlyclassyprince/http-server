@@ -6,12 +6,21 @@ import (
 	"strings"
 )
 
-// PlayerServer implements the `Handler` by type casting. It takes an HTTP request
-// to GET a player's score given the name, and POSTS (prints) the player's score.
-func PlayerServer(w http.ResponseWriter, r *http.Request) {
+// PlayerStore stores the retrieved player's score
+type PlayerStore interface {
+	GetPlayerScore(name string) int
+}
+
+// PlayerServer implements the handler method 'ServeHTTP' for a 'PlayerStore' interface.
+type PlayerServer struct {
+	store PlayerStore
+}
+
+// ServeHTTP is the handler that processes the HTTP requests
+func (p *PlayerServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	player := strings.TrimPrefix(r.URL.Path, "/players/")
 
-	fmt.Fprint(w, GetPlayerScore(player))
+	fmt.Fprint(w, p.store.GetPlayerScore(player))
 }
 
 // GetPlayerScore takes the player name and returns the score
