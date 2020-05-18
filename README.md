@@ -34,3 +34,28 @@ This is where *mocking* shines.
 >- `GET` will need a `PlayerStore` thing to get scores for a player. This should be an interface so when we test we can create a simple stub to test out code without needing to have implemented any actual storage code.
 >- For `POST` we can *spy* on its calls to `PlayerStore` to make sure it stores players correctly. Our implementation of saving won't be coupled to retrieval.
 >- For having some working software quickly we can make a very simple in-memory implementation and then later we can create an implementation backed by whatever storage mechanism we prefer.
+
+## Build the application
+
+Build and run the application with the following terminal commands:
+
+```bash
+go build && ./http-server
+```
+
+Then use `curl`, in a seperate terminal window, to communicate with the server.
+The following sends a `win` that will be recorded for Pepper.
+
+```bash
+curl -X POST http://localhost:5000/player/Pepper
+```
+
+You can view the result with the command:
+```bash
+curl http://localhost:5000/player/Pepper
+```
+
+or launching your browser to `http://localhost:5000/players/Pepper`.
+
+## References
+You can find the main tutorial article [here](https://quii.gitbook.io/learn-go-with-tests/build-an-application/http-server)
