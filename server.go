@@ -9,6 +9,7 @@ import (
 // PlayerStore stores the retrieved player's score
 type PlayerStore interface {
 	GetPlayerScore(name string) int
+	RecordWin(name string)
 }
 
 // PlayerServer implements the handler method 'ServeHTTP' for a 'PlayerStore' interface.
