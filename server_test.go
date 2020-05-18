@@ -69,15 +69,6 @@ func TestStoreWins(t *testing.T) {
 	}
 	server := &PlayerServer{&store}
 
-	t.Run("it returns accepted on POST", func(t *testing.T) {
-		request, _ := http.NewRequest(http.MethodPost, "players/Pepper", nil)
-		response := httptest.NewRecorder()
-
-		server.ServeHTTP(response, request)
-
-		assertStatus(t, response.Code, http.StatusAccepted)
-	})
-
 	t.Run("it records wins when POST", func(t *testing.T) {
 		request := newPostWinRequest("Pepper")
 		response := httptest.NewRecorder()
