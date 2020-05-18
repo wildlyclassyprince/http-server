@@ -59,3 +59,14 @@ or launching your browser to `http://localhost:5000/players/Pepper`.
 
 ## References
 You can find the main tutorial article [here](https://quii.gitbook.io/learn-go-with-tests/build-an-application/http-server)
+
+***
+
+## To do
+
+Implement the following using TDD.
+
+- [ ] Pick a store
+- [ ] Make `PostgresPlayerStore` implement `PlayerStore`
+- [ ] Plug it into integration test
+- [ ] Plug it into `main()`
