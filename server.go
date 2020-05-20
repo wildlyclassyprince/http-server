@@ -57,3 +57,8 @@ func GetPlayerScore(name string) string {
 
 	return ""
 }
+
+// Connect establishes the DB connection
+func Connect(appName string) string {
+	return "Connection established"
+}

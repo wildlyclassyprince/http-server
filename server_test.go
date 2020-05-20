@@ -89,6 +89,15 @@ func TestStoreWins(t *testing.T) {
 	})
 }
 
+func TestDBConnection(t *testing.T) {
+	got := Connect("connect test")
+	want := "Connection established"
+
+	if got != want {
+		t.Errorf("got %q want %q", got, want)
+	}
+}
+
 func TestRecordingWinsAndRetrievingThem(t *testing.T) {
 	store := NewInMemoryPlayerStore()
 	server := PlayerServer{store}
