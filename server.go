@@ -1,9 +1,13 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"net/http"
+	"os"
 	"strings"
+
+	"github.com/jackc/pgx/v4"
 )
 
 // PlayerStore stores the retrieved player's score
@@ -58,7 +62,22 @@ func GetPlayerScore(name string) string {
 	return ""
 }
 
-// Connect establishes the DB connection
-func Connect(appName string) string {
-	return "Connection established"
+// PostgresConnect establishes the DB connection
+func PostgresConnect() string {
+	conn, err := pgx.Connect(context.Background(), os.Getenv("DATABASE_URL"))
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
+		os.Exit(1)
+	}
+
+	defer conn.Close(context.Background())
+
+	var greeting string
+	err = conn.QueryRow(context.Background(), "select 'Connection established'").Scan(&greeting)
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "QueryRow failed: %v\n", err)
+		os.Exit(1)
+	}
+
+	return greeting
 }

@@ -90,12 +90,15 @@ func TestStoreWins(t *testing.T) {
 }
 
 func TestDBConnection(t *testing.T) {
-	got := Connect("connect test")
-	want := "Connection established"
 
-	if got != want {
-		t.Errorf("got %q want %q", got, want)
-	}
+	t.Run("it tests the database connection", func(t *testing.T) {
+		request := PostgresConnect()
+		response := "Connection established"
+
+		if request != response {
+			t.Errorf("got %q want %q", request, response)
+		}
+	})
 }
 
 func TestRecordingWinsAndRetrievingThem(t *testing.T) {
