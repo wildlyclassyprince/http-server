@@ -24,3 +24,6 @@
 
 # Do not include binary
 http-server
+
+# go.sum
+*.sum
