@@ -1,7 +1,6 @@
 package main
 
 import (
-	"database/sql"
 	"fmt"
 	"net/http"
 	"net/http/httptest"
@@ -114,8 +113,6 @@ func TestRecordingWinsAndRetrievingThem(t *testing.T) {
 	assertStatus(t, response.Code, http.StatusOK)
 	assertResponseBody(t, response.Body.String(), strconv.Itoa(repPOST))
 
-	// Clean-up
-	deleteDatabaseTable()
 }
 
 func assertPlayerID(t *testing.T, got, want int) {
@@ -147,22 +144,4 @@ func assertStatus(t *testing.T, got, want int) {
 func newPostWinRequest(name string) *http.Request {
 	req, _ := http.NewRequest(http.MethodPost, fmt.Sprintf("/players/%s", name), nil)
 	return req
-}
-
-func deleteDatabaseTable() {
-	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
-		"password=%s dbname=%s sslmode=disable",
-		Host, Port, User, Password, Dbname)
-	db, err := sql.Open("postgres", psqlInfo)
-	if err != nil {
-		panic(err)
-	}
-
-	defer db.Close()
-
-	sqlStatement := `DROP TABLE public.players`
-	_, err = db.Exec(sqlStatement)
-	if err != nil {
-		panic(err)
-	}
 }
