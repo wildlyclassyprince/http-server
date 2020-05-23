@@ -25,6 +25,11 @@ func (i *InMemoryPlayerStore) RecordWin(name string) {
 	i.store[name]++
 }
 
+// PostgresPlayerStore stores in the win in PostgreSQL
+func (i *InMemoryPlayerStore) PostgresPlayerStore() string {
+	return ""
+}
+
 func main() {
 	server := &PlayerServer{NewInMemoryPlayerStore()}
 
