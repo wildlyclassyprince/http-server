@@ -43,6 +43,11 @@ Build and run the application with the following terminal commands:
 go build && ./http-server
 ```
 
+Run the `.sql` file. It'll create the database table `public.players` on the `postgres` database:
+```bash
+psql postgres -h localhost -d postgres -f create_table.sql
+```
+
 Then use `curl`, in a seperate terminal window, to communicate with the server.
 The following sends a `win` that will be recorded for Pepper.
 
