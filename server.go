@@ -21,6 +21,7 @@ const (
 type PlayerStore interface {
 	GetPlayerScore(name string) int
 	RecordWin(name string)
+	PostgresPlayerStore() string
 }
 
 // PlayerServer implements the handler method 'ServeHTTP' for a 'PlayerStore' interface.
@@ -69,8 +70,9 @@ func GetPlayerScore(name string) string {
 	return ""
 }
 
-// PostgresConnect establishes the DB connection
-func PostgresConnect() string {
+// PostgresPlayerStore establishes a database connection
+// and stores player scores in a PostgreSQL database
+func PostgresPlayerStore() string {
 	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
 		"password=%s dbname=%s sslmode=disable",
 		host, port, user, password, dbname)
