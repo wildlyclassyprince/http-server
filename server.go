@@ -10,16 +10,11 @@ import (
 )
 
 const (
-	// Host is the hostname
-	Host = "localhost"
-	// Port is the default PostgreSQL port
-	Port = 5432
-	// User is the default name "postgres"
-	User = "postgres"
-	// Password is the "postgres" password
-	Password = ""
-	// Dbname is the name of the database
-	Dbname = "postgres"
+	host     = "localhost"
+	port     = 5432
+	user     = "postgres"
+	password = ""
+	dbname   = "postgres"
 )
 
 // PlayerStore stores the retrieved player's score
@@ -80,7 +75,7 @@ func GetPlayerScore(name string) string {
 func PostgresPlayerStore(name string, score int) int {
 	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
 		"password=%s dbname=%s sslmode=disable",
-		Host, Port, User, Password, Dbname)
+		host, port, user, password, dbname)
 	db, err := sql.Open("postgres", psqlInfo)
 	if err != nil {
 		panic(err)
