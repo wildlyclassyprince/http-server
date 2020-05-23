@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"strconv"
 	"testing"
 )
 
@@ -21,8 +22,8 @@ func (s *StubPlayerStore) RecordWin(name string) {
 	s.winCalls = append(s.winCalls, name)
 }
 
-func (s *StubPlayerStore) PostgresPlayerStore() string {
-	return ""
+func (s *StubPlayerStore) PostgresPlayerStore(name string, score int) int {
+	return 0
 }
 
 func TestGetPlayers(t *testing.T) {
@@ -93,32 +94,32 @@ func TestStoreWins(t *testing.T) {
 	})
 }
 
-func TestDBConnection(t *testing.T) {
-
-	t.Run("it tests the database connection", func(t *testing.T) {
-		successMessage := "Connection successful"
-		request := PostgresPlayerStore()
-
-		if request != successMessage {
-			t.Errorf("got %q want %q", request, successMessage)
-		}
-	})
-}
-
 func TestRecordingWinsAndRetrievingThem(t *testing.T) {
 	store := NewInMemoryPlayerStore()
 	server := PlayerServer{store}
 	player := "Pepper"
+	repPOST := 5
 
-	server.ServeHTTP(httptest.NewRecorder(), newPostWinRequest(player))
-	server.ServeHTTP(httptest.NewRecorder(), newPostWinRequest(player))
-	server.ServeHTTP(httptest.NewRecorder(), newPostWinRequest(player))
+	for i := 0; i < repPOST; i++ {
+		server.ServeHTTP(httptest.NewRecorder(), newPostWinRequest(player))
+	}
 
 	response := httptest.NewRecorder()
 	server.ServeHTTP(response, newGetScoreRequest(player))
-	assertStatus(t, response.Code, http.StatusOK)
 
-	assertResponseBody(t, response.Body.String(), "3")
+	// Insert into database
+	playerID := PostgresPlayerStore(player, repPOST)
+
+	assertPlayerID(t, playerID, 1)
+	assertStatus(t, response.Code, http.StatusOK)
+	assertResponseBody(t, response.Body.String(), strconv.Itoa(repPOST))
+}
+
+func assertPlayerID(t *testing.T, got, want int) {
+	t.Helper()
+	if got != want {
+		t.Errorf("player id is wrong, got %q, want %q", got, want)
+	}
 }
 
 func assertResponseBody(t *testing.T, got, want string) {
