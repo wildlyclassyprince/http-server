@@ -60,6 +60,11 @@ You can view the result with the command:
 curl http://localhost:5000/player/Pepper
 ```
 
+Clean-up after testing:
+```bash
+psql postgres -h localhost -d postgres -f cleanup.sql
+```
+
 or launching your browser to `http://localhost:5000/players/Pepper`.
 
 ## References
