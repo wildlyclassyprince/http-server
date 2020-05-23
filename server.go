@@ -83,7 +83,10 @@ func PostgresPlayerStore(name string, score int) int {
 
 	defer db.Close()
 
-	sqlStatement := `INSERT INTO public.players (name, score) VALUES ($1, $2) RETURNING id`
+	sqlStatement := `
+INSERT INTO public.players (name, score)
+VALUES ($1, $2)
+RETURNING id`
 	id := 0
 	err = db.QueryRow(sqlStatement, name, score).Scan(&id)
 	if err != nil {

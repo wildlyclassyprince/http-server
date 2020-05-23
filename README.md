@@ -67,6 +67,6 @@ You can find the main tutorial article [here](https://quii.gitbook.io/learn-go-w
 Implement the following using TDD.
 
 - [x] Pick a store => We'll use PostgreSQL.
-- [ ] Make `PostgresPlayerStore` implement `PlayerStore`
-- [ ] Plug it into integration test
+- [x] Make `PostgresPlayerStore` implement `PlayerStore`
+- [x] Plug it into integration test
 - [ ] Plug it into `main()`
