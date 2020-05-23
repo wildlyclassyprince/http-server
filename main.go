@@ -26,8 +26,8 @@ func (i *InMemoryPlayerStore) RecordWin(name string) {
 }
 
 // PostgresPlayerStore stores in the win in PostgreSQL
-func (i *InMemoryPlayerStore) PostgresPlayerStore() string {
-	return ""
+func (i *InMemoryPlayerStore) PostgresPlayerStore(name string, score int) int {
+	return 0
 }
 
 func main() {
