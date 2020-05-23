@@ -1,13 +1,20 @@
 package main
 
 import (
-	"context"
+	"database/sql"
 	"fmt"
 	"net/http"
-	"os"
 	"strings"
 
-	"github.com/jackc/pgx/v4"
+	_ "github.com/lib/pq"
+)
+
+const (
+	host     = "localhost"
+	port     = 5432
+	user     = "postgres"
+	password = ""
+	dbname   = "postgres"
 )
 
 // PlayerStore stores the retrieved player's score
@@ -64,20 +71,19 @@ func GetPlayerScore(name string) string {
 
 // PostgresConnect establishes the DB connection
 func PostgresConnect() string {
-	conn, err := pgx.Connect(context.Background(), os.Getenv("DATABASE_URL"))
+	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
+		"password=%s dbname=%s sslmode=disable",
+		host, port, user, password, dbname)
+	db, err := sql.Open("postgres", psqlInfo)
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Unable to connect to database: %v\n", err)
-		os.Exit(1)
+		panic(err)
 	}
 
-	defer conn.Close(context.Background())
+	defer db.Close()
 
-	var greeting string
-	err = conn.QueryRow(context.Background(), "select 'Connection established'").Scan(&greeting)
+	err = db.Ping()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "QueryRow failed: %v\n", err)
-		os.Exit(1)
+		panic(err)
 	}
-
-	return greeting
+	return "Connection successful"
 }
