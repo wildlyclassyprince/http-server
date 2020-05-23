@@ -21,6 +21,10 @@ func (s *StubPlayerStore) RecordWin(name string) {
 	s.winCalls = append(s.winCalls, name)
 }
 
+func (s *StubPlayerStore) PostgresPlayerStore() string {
+	return ""
+}
+
 func TestGetPlayers(t *testing.T) {
 
 	store := StubPlayerStore{
@@ -93,7 +97,7 @@ func TestDBConnection(t *testing.T) {
 
 	t.Run("it tests the database connection", func(t *testing.T) {
 		successMessage := "Connection successful"
-		request := PostgresConnect()
+		request := PostgresPlayerStore()
 
 		if request != successMessage {
 			t.Errorf("got %q want %q", request, successMessage)
