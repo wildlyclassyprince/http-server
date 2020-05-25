@@ -13,19 +13,27 @@ type PlayerStore interface {
 
 // PlayerServer implements the handler method 'ServeHTTP' for a 'PlayerStore' interface.
 type PlayerServer struct {
-	store PlayerStore
+	store  PlayerStore
+	router *http.ServeMux
+}
+
+// NewPlayerServer takes dependencies and does a one-time setup of creating the router
+func NewPlayerServer(store PlayerStore) *PlayerServer {
+	p := &PlayerServer{
+		store,
+		http.NewServeMux(),
+	}
+
+	p.router.Handle("/league", http.HandlerFunc(p.leagueHandler))
+	p.router.Handle("/players/", http.HandlerFunc(p.playerHandler))
+
+	return p
+
 }
 
 // ServeHTTP is the handler that processes the HTTP requests
 func (p *PlayerServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	//	player := strings.TrimPrefix(r.URL.Path, "/players/")
-
-	router := http.NewServeMux()
-
-	router.Handle("/league", http.HandlerFunc(p.leagueHandler))
-	router.Handle("/players/", http.HandlerFunc(p.playerHandler))
-	router.ServeHTTP(w, r)
-
+	p.router.ServeHTTP(w, r)
 }
 
 func (p *PlayerServer) leagueHandler(w http.ResponseWriter, r *http.Request) {
