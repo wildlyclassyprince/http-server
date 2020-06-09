@@ -1,6 +1,7 @@
 package main
 
 import (
+<<<<<<< HEAD
 	"database/sql"
 	"fmt"
 	"net/http"
@@ -15,23 +16,65 @@ const (
 	user     = "postgres"
 	password = ""
 	dbname   = "postgres"
+=======
+	"encoding/json"
+	"fmt"
+	"net/http"
+>>>>>>> json-routing-and-embedding
 )
+
+// Player values
+type Player struct {
+	Name string
+	Wins int
+}
 
 // PlayerStore stores the retrieved player's score
 type PlayerStore interface {
 	GetPlayerScore(name string) int
 	RecordWin(name string)
+<<<<<<< HEAD
 	PostgresPlayerStore(name string, score int) int
+=======
+	GetLeague() []Player
+>>>>>>> json-routing-and-embedding
 }
 
 // PlayerServer implements the handler method 'ServeHTTP' for a 'PlayerStore' interface.
 type PlayerServer struct {
 	store PlayerStore
+	http.Handler
 }
 
-// ServeHTTP is the handler that processes the HTTP requests
-func (p *PlayerServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	player := strings.TrimPrefix(r.URL.Path, "/players/")
+// NewPlayerServer takes dependencies and does a one-time setup of creating the router
+func NewPlayerServer(store PlayerStore) *PlayerServer {
+	p := new(PlayerServer)
+
+	p.store = store
+
+	router := http.NewServeMux()
+	router.Handle("/league", http.HandlerFunc(p.leagueHandler))
+	router.Handle("/players/", http.HandlerFunc(p.playerHandler))
+
+	p.Handler = router
+
+	return p
+
+}
+
+func (p *PlayerServer) leagueHandler(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("content-type", "application/json")
+	json.NewEncoder(w).Encode(p.store.GetLeague())
+}
+
+func (p *PlayerServer) getLeagueTable() []Player {
+	return []Player{
+		{"Chris", 20},
+	}
+}
+
+func (p *PlayerServer) playerHandler(w http.ResponseWriter, r *http.Request) {
+	player := r.URL.Path[len("/players/"):]
 
 	switch r.Method {
 	case http.MethodPost:
@@ -39,6 +82,7 @@ func (p *PlayerServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	case http.MethodGet:
 		p.showScore(w, player)
 	}
+
 }
 
 func (p *PlayerServer) showScore(w http.ResponseWriter, player string) {

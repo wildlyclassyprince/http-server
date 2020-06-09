@@ -1,11 +1,5 @@
 package main
 
-import (
-	"log"
-	"net/http"
-)
-
-<<<<<<< HEAD
 // NewInMemoryPlayerStore initializes store
 func NewInMemoryPlayerStore() *InMemoryPlayerStore {
 	return &InMemoryPlayerStore{map[string]int{}}
@@ -26,18 +20,11 @@ func (i *InMemoryPlayerStore) RecordWin(name string) {
 	i.store[name]++
 }
 
-// PostgresPlayerStore stores in the win in PostgreSQL
-func (i *InMemoryPlayerStore) PostgresPlayerStore(name string, score int) int {
-	return 0
-}
-
-=======
->>>>>>> json-routing-and-embedding
-func main() {
-	store := NewInMemoryPlayerStore()
-	server := NewPlayerServer(store)
-
-	if err := http.ListenAndServe(":5000", server); err != nil {
-		log.Fatalf("could not listen on port 5000 %v", err)
+// GetLeague returns player names and scores in JSON
+func (i *InMemoryPlayerStore) GetLeague() []Player {
+	var league []Player
+	for name, wins := range i.store {
+		league = append(league, Player{name, wins})
 	}
+	return league
 }
