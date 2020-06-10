@@ -6,7 +6,7 @@ import (
 
 // FileSystemPlayerStore stores database objects
 type FileSystemPlayerStore struct {
-	database io.ReadSeeker
+	database io.ReadWriteSeeker
 }
 
 // GetLeague stores player scores in JSON file
