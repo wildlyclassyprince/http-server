@@ -20,7 +20,8 @@ func TestFileSystemStore(t *testing.T) {
 			{"Cleo", 10},
 			{"Chris", 33},
 		}
-
+		// read again
+		got = store.GetLeague()
 		assertLeague(t, got, want)
 	})
 }
