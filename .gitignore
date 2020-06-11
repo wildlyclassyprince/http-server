@@ -26,8 +26,3 @@
 http-server
 
 # go.sum
-<<<<<<< HEAD
-*.sum
-=======
-*.sum
->>>>>>> json-routing-and-embedding
