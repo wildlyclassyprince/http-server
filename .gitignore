@@ -26,4 +26,4 @@
 http-server
 
 # go.sum
-.sum
+go.sum
