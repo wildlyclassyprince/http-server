@@ -26,3 +26,4 @@
 http-server
 
 # go.sum
+.sum
