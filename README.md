@@ -34,3 +34,8 @@ This is where *mocking* shines.
 >- `GET` will need a `PlayerStore` thing to get scores for a player. This should be an interface so when we test we can create a simple stub to test out code without needing to have implemented any actual storage code.
 >- For `POST` we can *spy* on its calls to `PlayerStore` to make sure it stores players correctly. Our implementation of saving won't be coupled to retrieval.
 >- For having some working software quickly we can make a very simple in-memory implementation and then later we can create an implementation backed by whatever storage mechanism we prefer.
+
+
+## References
+
+You can find the original [here](https://quii.gitbook.io/learn-go-with-tests)
