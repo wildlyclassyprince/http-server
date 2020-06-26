@@ -6,6 +6,19 @@ import (
 	"io"
 )
 
+// League implements player
+type League []Player
+
+// Find returns the player stats given the name
+func (l League) Find(name string) *Player {
+	for i, p := range l {
+		if p.Name == name {
+			return &l[i]
+		}
+	}
+	return nil
+}
+
 // NewLeague decodes JSON
 func NewLeague(rdr io.Reader) ([]Player, error) {
 	var league []Player
