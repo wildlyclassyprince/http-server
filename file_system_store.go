@@ -8,18 +8,27 @@ import (
 // FileSystemPlayerStore stores database objects
 type FileSystemPlayerStore struct {
 	database io.ReadWriteSeeker
+	league   League
+}
+
+// NewFileSystemPlayerStore allows us to read the file only on update not startup
+func NewFileSystemPlayerStore(database io.ReadWriteSeeker) *FileSystemPlayerStore {
+	database.Seek(0, 0)
+	league, _ := NewLeague(database)
+	return &FileSystemPlayerStore{
+		database: database,
+		league:   league,
+	}
 }
 
 // GetLeague stores player scores in JSON file
 func (f *FileSystemPlayerStore) GetLeague() League {
-	f.database.Seek(0, 0)
-	league, _ := NewLeague(f.database)
-	return league
+	return f.league
 }
 
 // GetPlayerScore returns the player's score
 func (f *FileSystemPlayerStore) GetPlayerScore(name string) int {
-	player := f.GetLeague().Find(name)
+	player := f.league.Find(name)
 
 	if player != nil {
 		return player.Wins
@@ -30,15 +39,15 @@ func (f *FileSystemPlayerStore) GetPlayerScore(name string) int {
 
 // RecordWin stores player scores
 func (f *FileSystemPlayerStore) RecordWin(name string) {
-	league := f.GetLeague()
-	player := league.Find(name)
+
+	player := f.league.Find(name)
 
 	if player != nil {
 		player.Wins++
 	} else {
-		league = append(league, Player{name, 1})
+		f.league = append(f.league, Player{name, 1})
 	}
 
 	f.database.Seek(0, 0)
-	json.NewEncoder(f.database).Encode(league)
+	json.NewEncoder(f.database).Encode(f.league)
 }
