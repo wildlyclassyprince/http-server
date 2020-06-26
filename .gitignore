@@ -26,4 +26,8 @@
 http-server
 
 # go.sum
+<<<<<<< HEAD
 *.sum
+=======
+go.sum
+>>>>>>> c66d57e0c47d2789a849092f3bcac5e78eff7391
